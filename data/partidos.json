@@ -1,0 +1,40 @@
+{
+  "partidos": [
+    {
+      "id": "j1-p1",
+      "jornada": 1,
+      "local": "U.E. Sabadellenca",
+      "visitante": "A.V. L'Ametlla del Vallés",
+      "campo": "Mpal Sabadell",
+      "fecha": "2026-10-18",
+      "hora": "08:15"
+    },
+    {
+      "id": "j2-p1",
+      "jornada": 2,
+      "local": "C.E. Santa Eulalia de Ronçana",
+      "visitante": "A.V. L'Ametlla del Vallés",
+      "campo": "Mpal Santa Eulalia",
+      "fecha": "2026-10-19",
+      "hora": "08:00"
+    },
+    {
+      "id": "j6-p2",
+      "jornada": 6,
+      "local": "U.E. Canovelles",
+      "visitante": "A.V. L'Ametlla del Vallés",
+      "campo": "MPAL CANOVELLES",
+      "fecha": "2026-10-25",
+      "hora": "08:00"
+    },
+    {
+      "id": "j7-p3",
+      "jornada": 7,
+      "local": "Penya Decano",
+      "visitante": "U.E. Castellar",
+      "campo": "Mpal Valles",
+      "fecha": "2026-10-26",
+      "hora": "09:00"
+    }
+  ]
+}

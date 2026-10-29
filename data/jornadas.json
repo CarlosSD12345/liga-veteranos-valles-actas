@@ -1,0 +1,11 @@
+{
+  "jornadas": [
+    { "id": 1, "nombre": "Jornada 1" },
+    { "id": 2, "nombre": "Jornada 2" },
+    { "id": 3, "nombre": "Jornada 3" },
+    { "id": 4, "nombre": "Jornada 4" },
+    { "id": 5, "nombre": "Jornada 5" },
+    { "id": 6, "nombre": "Jornada 6" },
+    { "id": 7, "nombre": "Jornada 7" }
+  ]
+}

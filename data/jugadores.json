@@ -1,0 +1,22 @@
+{
+  "jugadores": [
+    { "equipo": "U.E. Sabadellenca", "nombre": "Uri", "dorsal": 1 },
+    { "equipo": "U.E. Sabadellenca", "nombre": "Abel", "dorsal": 2 },
+    { "equipo": "U.E. Sabadellenca", "nombre": "Dídac", "dorsal": 3 },
+    { "equipo": "A.V. L'Ametlla del Vallés", "nombre": "Kaña", "dorsal": 9 },
+    { "equipo": "A.V. L'Ametlla del Vallés", "nombre": "Javi", "dorsal": 10 },
+    { "equipo": "A.V. L'Ametlla del Vallés", "nombre": "Torito", "dorsal": 7 },
+    { "equipo": "C.F. Barberá", "nombre": "Alvaro", "dorsal": 11 },
+    { "equipo": "C.F. Barberá", "nombre": "Felix", "dorsal": 8 },
+    { "equipo": "U.E. Canovelles", "nombre": "Antonio", "dorsal": 5 },
+    { "equipo": "U.E. Canovelles", "nombre": "Davi", "dorsal": 4 },
+    { "equipo": "C.F. Cerdanyola", "nombre": "Pepelu", "dorsal": 6 },
+    { "equipo": "C.F. Cerdanyola", "nombre": "Nico Ruiz", "dorsal": 13 },
+    { "equipo": "U.E. Castellar", "nombre": "Jaime Perales", "dorsal": 9 },
+    { "equipo": "U.E. Castellar", "nombre": "Xavi Herrero", "dorsal": 18 },
+    { "equipo": "C.E. Santa Eulalia de Ronçana", "nombre": "Borja", "dorsal": 10 },
+    { "equipo": "C.E. Santa Eulalia de Ronçana", "nombre": "Dani", "dorsal": 7 },
+    { "equipo": "Penya Decano", "nombre": "Sergio Hermoso", "dorsal": 14 },
+    { "equipo": "Penya Decano", "nombre": "Denis", "dorsal": 20 }
+  ]
+}

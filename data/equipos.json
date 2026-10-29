@@ -1,0 +1,36 @@
+{
+  "equipos": [
+    {
+      "id": "ue-sabadellenca",
+      "nombre": "U.E. Sabadellenca"
+    },
+    {
+      "id": "av-ametlla",
+      "nombre": "A.V. L'Ametlla del Vallés"
+    },
+    {
+      "id": "cf-barbera",
+      "nombre": "C.F. Barberá"
+    },
+    {
+      "id": "ue-canovelles",
+      "nombre": "U.E. Canovelles"
+    },
+    {
+      "id": "cf-cerdanyola",
+      "nombre": "C.F. Cerdanyola"
+    },
+    {
+      "id": "ue-castellar",
+      "nombre": "U.E. Castellar"
+    },
+    {
+      "id": "ce-santa-eulalia",
+      "nombre": "C.E. Santa Eulalia de Ronçana"
+    },
+    {
+      "id": "penya-decano",
+      "nombre": "Penya Decano"
+    }
+  ]
+}

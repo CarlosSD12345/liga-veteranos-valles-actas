@@ -1,0 +1,125 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f6f4;
+  color: #1c2c24;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+.two-columns {
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+}
+
+.score-grid {
+  grid-template-columns: repeat(2, minmax(200px, 1fr));
+  margin-top: 20px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 600;
+}
+
+input, select, textarea, button {
+  font: inherit;
+}
+
+input, select, textarea {
+  width: 100%;
+  border: 1px solid #c7d5cf;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.score-box {
+  border: 1px solid #d9e3df;
+  background: #f6faf8;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.score-box input {
+  font-size: 2rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.btn-primary, .btn-secondary, .btn-remove {
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.btn-primary {
+  background: #1f8d4f;
+  color: white;
+}
+
+.btn-secondary {
+  background: #e9f7ef;
+  color: #1b5d36;
+}
+
+.btn-remove {
+  background: #ffe5e5;
+  color: #8b1e1e;
+}
+
+.incidencia-item {
+  border: 1px solid #dfeae5;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: #fbfdfc;
+}
+
+.incidencia-item .row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(80px, 1fr));
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 760px) {
+  .two-columns, .score-grid, .incidencia-item .row {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
