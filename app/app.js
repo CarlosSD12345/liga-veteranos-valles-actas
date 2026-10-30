@@ -2,46 +2,65 @@ const actasKey = 'liga-veteranos-valles-actas';
 
 const partidos = [
   {
-    id: "j1-p1",
+    id: 'j1-p1',
     jornada: 1,
-    local: "U.E. Sabadellenca",
-    visitante: "A.V. L'Ametlla del Vallés",
-    campo: "Mpal Sabadell",
-    fecha: "2026-10-18",
-    hora: "08:15"
+    local: 'U.E. Sabadellenca',
+    visitante: 'A.V. L\'Ametlla del Vallés',
+    campo: 'Mpal Sabadell',
+    fecha: '2026-10-18',
+    hora: '08:15'
   },
   {
-    id: "j2-p1",
+    id: 'j1-p2',
+    jornada: 1,
+    local: 'C.E. Santa Eulàlia de Ronçana',
+    visitante: 'Penya Decano',
+    campo: 'Mpal Santa Eulàlia',
+    fecha: '2026-10-18',
+    hora: '09:00'
+  },
+  {
+    id: 'j2-p1',
     jornada: 2,
-    local: "U.E. Castellar",
-    visitante: "U.E. Sabadellenca",
-    campo: "Mpal Castellar",
-    fecha: "2026-10-25",
-    hora: "08:00"
+    local: 'U.E. Castellar',
+    visitante: 'U.E. Sabadellenca',
+    campo: 'Mpal Castellar',
+    fecha: '2026-10-25',
+    hora: '08:00'
   }
 ];
 
 const arbitros = [
-  { nombre: "Duran" },
-  { nombre: "Molina" },
-  { nombre: "Puibert" },
-  { nombre: "Fabregas" },
-  { nombre: "Salva" }
+  { nombre: 'Duran' },
+  { nombre: 'Molina' },
+  { nombre: 'Puibert' },
+  { nombre: 'Fabregas' },
+  { nombre: 'Salva' }
 ];
 
 const jugadores = [
-  { equipo: "U.E. Sabadellenca", dorsal: 1, nombre: "Uri" },
-  { equipo: "U.E. Sabadellenca", dorsal: 2, nombre: "Abel" },
-  { equipo: "U.E. Sabadellenca", dorsal: 3, nombre: "Dídac" },
-  { equipo: "U.E. Sabadellenca", dorsal: 7, nombre: "Xavi" },
+  { equipo: 'U.E. Sabadellenca', dorsal: 1, nombre: 'Uri' },
+  { equipo: 'U.E. Sabadellenca', dorsal: 2, nombre: 'Abel' },
+  { equipo: 'U.E. Sabadellenca', dorsal: 3, nombre: 'Dídac' },
+  { equipo: 'U.E. Sabadellenca', dorsal: 7, nombre: 'Xavi' },
+  { equipo: 'U.E. Sabadellenca', dorsal: 9, nombre: 'Pau' },
 
-  { equipo: "A.V. L'Ametlla del Vallés", dorsal: 7, nombre: "Torito" },
-  { equipo: "A.V. L'Ametlla del Vallés", dorsal: 9, nombre: "Kaña" },
-  { equipo: "A.V. L'Ametlla del Vallés", dorsal: 10, nombre: "Javi" },
+  { equipo: 'A.V. L\'Ametlla del Vallés', dorsal: 7, nombre: 'Torito' },
+  { equipo: 'A.V. L\'Ametlla del Vallés', dorsal: 9, nombre: 'Kaña' },
+  { equipo: 'A.V. L\'Ametlla del Vallés', dorsal: 10, nombre: 'Javi' },
+  { equipo: 'A.V. L\'Ametlla del Vallés', dorsal: 11, nombre: 'Miki' },
 
-  { equipo: "U.E. Castellar", dorsal: 1, nombre: "Jaime" },
-  { equipo: "U.E. Castellar", dorsal: 7, nombre: "Xavi" },
-  { equipo: "U.E. Castellar", dorsal: 9, nombre: "Pepe" }
+  { equipo: 'C.E. Santa Eulàlia de Ronçana', dorsal: 1, nombre: 'Borja' },
+  { equipo: 'C.E. Santa Eulàlia de Ronçana', dorsal: 7, nombre: 'Dani' },
+  { equipo: 'C.E. Santa Eulàlia de Ronçana', dorsal: 10, nombre: 'Miquel' },
+
+  { equipo: 'Penya Decano', dorsal: 4, nombre: 'Sergio' },
+  { equipo: 'Penya Decano', dorsal: 8, nombre: 'Miki' },
+  { equipo: 'Penya Decano', dorsal: 9, nombre: 'Andreu' },
+
+  { equipo: 'U.E. Castellar', dorsal: 1, nombre: 'Jaime' },
+  { equipo: 'U.E. Castellar', dorsal: 7, nombre: 'Xavi' },
+  { equipo: 'U.E. Castellar', dorsal: 9, nombre: 'Pepe' }
 ];
 
 const state = {
@@ -53,6 +72,7 @@ const state = {
 
 function buildJugadoresMap() {
   const mapa = {};
+
   jugadores.forEach((jugador) => {
     if (!mapa[jugador.equipo]) mapa[jugador.equipo] = [];
     mapa[jugador.equipo].push({
@@ -60,7 +80,70 @@ function buildJugadoresMap() {
       nombre: jugador.nombre
     });
   });
+
   state.jugadores = mapa;
+}
+
+function renderPlayerRows(tipo, jugadoresEquipo) {
+  const container = document.getElementById(tipo === 'local' ? 'convocadosLocal' : 'convocadosVisitante');
+  container.innerHTML = '';
+
+  const table = document.createElement('div');
+  table.className = 'player-table';
+
+  const thead = document.createElement('div');
+  thead.className = 'player-table-head';
+  thead.innerHTML = '<span>NIF</span><span>Dorsal</span><span>Nombre y apellidos</span><span>Titular</span>';
+  table.appendChild(thead);
+
+  const filas = jugadoresEquipo && jugadoresEquipo.length ? jugadoresEquipo : [
+    { nif: '', dorsal: '', nombreCompleto: '', titular: true },
+    { nif: '', dorsal: '', nombreCompleto: '', titular: false },
+    { nif: '', dorsal: '', nombreCompleto: '', titular: true },
+    { nif: '', dorsal: '', nombreCompleto: '', titular: false }
+  ];
+
+  filas.forEach((jugador) => {
+    const row = document.createElement('div');
+    row.className = 'player-row';
+
+    const nifInput = document.createElement('input');
+    nifInput.type = 'text';
+    nifInput.value = jugador.nif || '';
+    nifInput.placeholder = 'NIF';
+    nifInput.setAttribute('aria-label', 'NIF del jugador');
+
+    const dorsalInput = document.createElement('input');
+    dorsalInput.type = 'number';
+    dorsalInput.min = '1';
+    dorsalInput.max = '99';
+    dorsalInput.value = jugador.dorsal || '';
+    dorsalInput.placeholder = 'Dorsal';
+    dorsalInput.setAttribute('aria-label', 'Dorsal del jugador');
+
+    const nombreInput = document.createElement('input');
+    nombreInput.type = 'text';
+    nombreInput.value = jugador.nombreCompleto || '';
+    nombreInput.placeholder = 'Nombre y apellidos';
+    nombreInput.setAttribute('aria-label', 'Nombre y apellidos del jugador');
+
+    const titularWrap = document.createElement('label');
+    titularWrap.className = 'titular-check';
+
+    const titularInput = document.createElement('input');
+    titularInput.type = 'checkbox';
+    titularInput.checked = Boolean(jugador.titular);
+
+    titularWrap.appendChild(titularInput);
+
+    row.appendChild(nifInput);
+    row.appendChild(dorsalInput);
+    row.appendChild(nombreInput);
+    row.appendChild(titularWrap);
+    table.appendChild(row);
+  });
+
+  container.appendChild(table);
 }
 
 function populateArbitros() {
@@ -121,46 +204,26 @@ function cargarPartidoSeleccionado() {
 
   document.getElementById('localEquipo').textContent = partido.local;
   document.getElementById('visitanteEquipo').textContent = partido.visitante;
-  document.getElementById('localLabel').textContent = partido.local;
-  document.getElementById('visitanteLabel').textContent = partido.visitante;
-
   document.getElementById('fechaInput').value = partido.fecha;
   document.getElementById('horaInput').value = partido.hora;
   document.getElementById('campoInput').value = partido.campo;
 
-  renderJugadores(partido.local, 'local');
-  renderJugadores(partido.visitante, 'visitante');
-}
+  const jugadoresLocal = (state.jugadores[partido.local] || []).map((jugador) => ({
+    nif: '',
+    dorsal: jugador.dorsal,
+    nombreCompleto: jugador.nombre,
+    titular: true
+  }));
 
-function renderJugadores(equipo, tipo) {
-  const container = document.getElementById(tipo === 'local' ? 'convocadosLocal' : 'convocadosVisitante');
-  container.innerHTML = '';
+  const jugadoresVisitante = (state.jugadores[partido.visitante] || []).map((jugador) => ({
+    nif: '',
+    dorsal: jugador.dorsal,
+    nombreCompleto: jugador.nombre,
+    titular: true
+  }));
 
-  const lista = state.jugadores[equipo] || [];
-
-  lista.forEach((jugador) => {
-    const row = document.createElement('label');
-    row.className = 'player-item';
-
-    const input = document.createElement('input');
-    input.type = 'checkbox';
-    input.checked = true;
-    input.value = JSON.stringify({
-      dorsal: jugador.dorsal,
-      nombre: jugador.nombre
-    });
-
-    const dorsal = document.createElement('strong');
-    dorsal.textContent = String(jugador.dorsal);
-
-    const nombre = document.createElement('span');
-    nombre.textContent = jugador.nombre;
-
-    row.appendChild(input);
-    row.appendChild(dorsal);
-    row.appendChild(nombre);
-    container.appendChild(row);
-  });
+  renderPlayerRows('local', jugadoresLocal);
+  renderPlayerRows('visitante', jugadoresVisitante);
 }
 
 function addIncidenciaRow() {
@@ -187,23 +250,38 @@ function addIncidenciaRow() {
     <button type="button" class="remove-btn">Eliminar</button>
   `;
 
-  const remove = row.querySelector('.remove-btn');
-  remove.addEventListener('click', () => row.remove());
+  const removeBtn = row.querySelector('.remove-btn');
+  removeBtn.addEventListener('click', () => row.remove());
 
   container.appendChild(row);
 }
 
 function obtenerJugadoresMarcados(tipo) {
-  const selector = tipo === 'local' ? '#convocadosLocal input:checked' : '#convocadosVisitante input:checked';
-  return [...document.querySelectorAll(selector)].map((input) => {
-    const value = JSON.parse(input.value);
-    return { dorsal: value.dorsal, nombre: value.nombre };
-  });
+  const container = document.getElementById(tipo === 'local' ? 'convocadosLocal' : 'convocadosVisitante');
+  const rows = container.querySelectorAll('.player-row');
+
+  return [...rows].map((row) => {
+    const inputs = row.querySelectorAll('input');
+    const nif = inputs[0]?.value?.trim() || '';
+    const dorsal = inputs[1]?.value?.trim() || '';
+    const nombreCompleto = inputs[2]?.value?.trim() || '';
+    const titular = inputs[3]?.checked || false;
+
+    if (!nif && !dorsal && !nombreCompleto) return null;
+
+    return {
+      nif,
+      dorsal,
+      nombreCompleto,
+      titular
+    };
+  }).filter(Boolean);
 }
 
 function obtenerIncidencias() {
   return [...document.querySelectorAll('.incidencia-row')].map((row) => {
     const inputs = row.querySelectorAll('input, select');
+
     return {
       minuto: inputs[0].value,
       tipo: inputs[1].value,
@@ -286,7 +364,9 @@ function renderSavedActas() {
 
 function cargarActaGuardada(acta) {
   const partidoSelect = document.getElementById('partidoSelect');
-  const partido = state.partidos.find((p) => p.local === acta.partido.local && p.visitante === acta.partido.visitante);
+  const partido = state.partidos.find(
+    (p) => p.local === acta.partido.local && p.visitante === acta.partido.visitante
+  );
 
   if (!partido) return;
 
@@ -301,18 +381,30 @@ function cargarActaGuardada(acta) {
   document.getElementById('golesVisitante').value = acta.resultado.visitante || 0;
   document.getElementById('observaciones').value = acta.observaciones || '';
 
-  const localChecks = document.querySelectorAll('#convocadosLocal input');
-  localChecks.forEach((input) => {
-    const val = JSON.parse(input.value);
-    const encontrado = (acta.convocados?.local || []).some((p) => p.dorsal === val.dorsal && p.nombre === val.nombre);
-    input.checked = encontrado;
+  const localContainer = document.getElementById('convocadosLocal');
+  const localRows = localContainer.querySelectorAll('.player-row');
+  const localData = acta.convocados?.local || [];
+
+  localRows.forEach((row, index) => {
+    const inputs = row.querySelectorAll('input');
+    const entry = localData[index] || {};
+    inputs[0].value = entry.nif || '';
+    inputs[1].value = entry.dorsal || '';
+    inputs[2].value = entry.nombreCompleto || '';
+    inputs[3].checked = Boolean(entry.titular);
   });
 
-  const visitanteChecks = document.querySelectorAll('#convocadosVisitante input');
-  visitanteChecks.forEach((input) => {
-    const val = JSON.parse(input.value);
-    const encontrado = (acta.convocados?.visitante || []).some((p) => p.dorsal === val.dorsal && p.nombre === val.nombre);
-    input.checked = encontrado;
+  const visitanteContainer = document.getElementById('convocadosVisitante');
+  const visitanteRows = visitanteContainer.querySelectorAll('.player-row');
+  const visitanteData = acta.convocados?.visitante || [];
+
+  visitanteRows.forEach((row, index) => {
+    const inputs = row.querySelectorAll('input');
+    const entry = visitanteData[index] || {};
+    inputs[0].value = entry.nif || '';
+    inputs[1].value = entry.dorsal || '';
+    inputs[2].value = entry.nombreCompleto || '';
+    inputs[3].checked = Boolean(entry.titular);
   });
 
   const incidenciasContainer = document.getElementById('incidenciasContainer');
@@ -346,3 +438,24 @@ populateJornadas();
 bindEvents();
 addIncidenciaRow();
 renderSavedActas();
+
+const localContainer = document.getElementById('convocadosLocal');
+const visitanteContainer = document.getElementById('convocadosVisitante');
+
+if (localContainer) renderPlayerRows('local', []);
+if (visitanteContainer) renderPlayerRows('visitante', []);
+
+const partidoSelect = document.getElementById('partidoSelect');
+if (partidoSelect && partidoSelect.options.length > 0) {
+  partidoSelect.value = partidoSelect.options[0].value;
+  cargarPartidoSeleccionado();
+}
+
+window.addEventListener('load', () => {
+  const selector = document.getElementById('jornadaSelect');
+  if (selector && selector.options.length > 0) {
+    selector.value = selector.options[0].value;
+    populatePartidosByJornada(Number(selector.value));
+  }
+});
+
