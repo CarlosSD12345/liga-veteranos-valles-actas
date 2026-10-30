@@ -1,60 +1,68 @@
-const state = {
-  partidos: [],
-  arbitros: [],
-  jugadores: {},
-  actas: []
-};
-
 const actasKey = 'liga-veteranos-valles-actas';
 
-async function initApp() {
-  try {
-    const [partidosResponse, arbitrosResponse, jugadoresResponse] = await Promise.all([
-      fetch('../data/partidos.json'),
-      fetch('../data/arbitros.json'),
-      fetch('../data/jugadores.json')
-    ]);
-
-    if (!partidosResponse.ok || !arbitrosResponse.ok || !jugadoresResponse.ok) {
-      throw new Error('No se pudieron cargar los datos del partido.');
-    }
-
-    const partidosData = await partidosResponse.json();
-    const arbitrosData = await arbitrosResponse.json();
-    const jugadoresData = await jugadoresResponse.json();
-
-    state.partidos = partidosData.partidos || [];
-    state.arbitros = arbitrosData.arbitros || [];
-    state.jugadores = buildJugadoresMap(jugadoresData.jugadores || []);
-    state.actas = JSON.parse(localStorage.getItem(actasKey) || '[]');
-
-    populateArbitros();
-    populateJornadas();
-    addIncidenciaRow();
-    bindEvents();
-    renderSavedActas();
-  } catch (error) {
-    console.error(error);
-    alert('No se pudieron cargar los datos. Comprueba que la app se esté ejecutando desde un servidor local.');
+const partidos = [
+  {
+    id: "j1-p1",
+    jornada: 1,
+    local: "U.E. Sabadellenca",
+    visitante: "A.V. L'Ametlla del Vallés",
+    campo: "Mpal Sabadell",
+    fecha: "2026-10-18",
+    hora: "08:15"
+  },
+  {
+    id: "j2-p1",
+    jornada: 2,
+    local: "U.E. Castellar",
+    visitante: "U.E. Sabadellenca",
+    campo: "Mpal Castellar",
+    fecha: "2026-10-25",
+    hora: "08:00"
   }
-}
+];
 
-function buildJugadoresMap(jugadores) {
+const arbitros = [
+  { nombre: "Duran" },
+  { nombre: "Molina" },
+  { nombre: "Puibert" },
+  { nombre: "Fabregas" },
+  { nombre: "Salva" }
+];
+
+const jugadores = [
+  { equipo: "U.E. Sabadellenca", dorsal: 1, nombre: "Uri" },
+  { equipo: "U.E. Sabadellenca", dorsal: 2, nombre: "Abel" },
+  { equipo: "U.E. Sabadellenca", dorsal: 3, nombre: "Dídac" },
+  { equipo: "U.E. Sabadellenca", dorsal: 7, nombre: "Xavi" },
+  { equipo: "U.E. Sabadellenca", dorsal: 9, nombre: "Pau" },
+
+  { equipo: "A.V. L'Ametlla del Vallés", dorsal: 7, nombre: "Torito" },
+  { equipo: "A.V. L'Ametlla del Vallés", dorsal: 9, nombre: "Kaña" },
+  { equipo: "A.V. L'Ametlla del Vallés", dorsal: 10, nombre: "Javi" },
+  { equipo: "A.V. L'Ametlla del Vallés", dorsal: 11, nombre: "Miki" },
+
+  { equipo: "U.E. Castellar", dorsal: 1, nombre: "Jaime" },
+  { equipo: "U.E. Castellar", dorsal: 7, nombre: "Xavi" },
+  { equipo: "U.E. Castellar", dorsal: 9, nombre: "Pepe" }
+];
+
+const state = {
+  partidos: partidos,
+  arbitros: arbitros,
+  jugadores: {},
+  actas: JSON.parse(localStorage.getItem(actasKey) || '[]')
+};
+
+function buildJugadoresMap() {
   const mapa = {};
-
   jugadores.forEach((jugador) => {
-    const equipo = jugador.equipo;
-    if (!mapa[equipo]) {
-      mapa[equipo] = [];
-    }
-
-    mapa[equipo].push({
+    if (!mapa[jugador.equipo]) mapa[jugador.equipo] = [];
+    mapa[jugador.equipo].push({
       dorsal: jugador.dorsal,
       nombre: jugador.nombre
     });
   });
-
-  return mapa;
+  state.jugadores = mapa;
 }
 
 function populateArbitros() {
@@ -73,7 +81,7 @@ function populateJornadas() {
   const jornadaSelect = document.getElementById('jornadaSelect');
   jornadaSelect.innerHTML = '<option value="">Selecciona jornada</option>';
 
-  const jornadas = [...new Set(state.partidos.map((partido) => partido.jornada))].sort((a, b) => a - b);
+  const jornadas = [...new Set(state.partidos.map((p) => p.jornada))].sort((a, b) => a - b);
 
   jornadas.forEach((jornada) => {
     const option = document.createElement('option');
@@ -83,8 +91,8 @@ function populateJornadas() {
   });
 
   jornadaSelect.addEventListener('change', (event) => {
-    const jornada = Number(event.target.value);
-    populatePartidosByJornada(jornada);
+    const numero = Number(event.target.value);
+    populatePartidosByJornada(numero);
   });
 }
 
@@ -92,29 +100,26 @@ function populatePartidosByJornada(jornada) {
   const partidoSelect = document.getElementById('partidoSelect');
   partidoSelect.innerHTML = '<option value="">Selecciona partido</option>';
 
-  const partidos = state.partidos.filter((partido) => partido.jornada === jornada);
+  const partidosJornada = state.partidos.filter((p) => p.jornada === jornada);
 
-  partidos.forEach((partido) => {
+  partidosJornada.forEach((partido) => {
     const option = document.createElement('option');
     option.value = partido.id;
     option.textContent = `${partido.local} vs ${partido.visitante}`;
     partidoSelect.appendChild(option);
   });
 
-  if (partidos.length > 0) {
-    partidoSelect.value = partidos[0].id;
+  if (partidosJornada.length > 0) {
+    partidoSelect.value = partidosJornada[0].id;
     cargarPartidoSeleccionado();
   }
 }
 
 function cargarPartidoSeleccionado() {
-  const partidoId = document.getElementById('partidoSelect').value;
-  const partido = state.partidos.find((item) => item.id === partidoId);
+  const id = document.getElementById('partidoSelect').value;
+  const partido = state.partidos.find((p) => p.id === id);
 
-  if (!partido) {
-    resetPartidoFields();
-    return;
-  }
+  if (!partido) return;
 
   document.getElementById('localEquipo').textContent = partido.local;
   document.getElementById('visitanteEquipo').textContent = partido.visitante;
@@ -123,7 +128,7 @@ function cargarPartidoSeleccionado() {
 
   document.getElementById('fechaInput').value = partido.fecha;
   document.getElementById('horaInput').value = partido.hora;
-  document.getElementById('campoInput').value = partido.campo || '';
+  document.getElementById('campoInput').value = partido.campo;
 
   renderJugadores(partido.local, 'local');
   renderJugadores(partido.visitante, 'visitante');
@@ -131,25 +136,24 @@ function cargarPartidoSeleccionado() {
 
 function renderJugadores(equipo, tipo) {
   const container = document.getElementById(tipo === 'local' ? 'convocadosLocal' : 'convocadosVisitante');
-  const jugadores = state.jugadores[equipo] || [];
-
   container.innerHTML = '';
 
-  jugadores.forEach((jugador) => {
+  const lista = state.jugadores[equipo] || [];
+
+  lista.forEach((jugador) => {
     const row = document.createElement('label');
     row.className = 'player-item';
 
     const input = document.createElement('input');
     input.type = 'checkbox';
     input.checked = true;
-    input.name = `${tipo}-${jugador.dorsal}`;
     input.value = JSON.stringify({
       dorsal: jugador.dorsal,
       nombre: jugador.nombre
     });
 
     const dorsal = document.createElement('strong');
-    dorsal.textContent = jugador.dorsal;
+    dorsal.textContent = String(jugador.dorsal);
 
     const nombre = document.createElement('span');
     nombre.textContent = jugador.nombre;
@@ -161,20 +165,14 @@ function renderJugadores(equipo, tipo) {
   });
 }
 
-function bindEvents() {
-  document.getElementById('partidoSelect').addEventListener('change', cargarPartidoSeleccionado);
-  document.getElementById('addIncidencia').addEventListener('click', addIncidenciaRow);
-  document.getElementById('guardarActa').addEventListener('click', guardarActa);
-}
-
 function addIncidenciaRow() {
   const container = document.getElementById('incidenciasContainer');
   const row = document.createElement('div');
   row.className = 'incidencia-row';
 
   row.innerHTML = `
-    <input type="number" min="0" max="120" placeholder="Min." aria-label="Minuto" />
-    <select aria-label="Tipo de incidencia">
+    <input type="number" min="0" max="120" placeholder="Min." />
+    <select>
       <option value="gol">Gol</option>
       <option value="amarilla">Amarilla</option>
       <option value="roja">Roja</option>
@@ -182,17 +180,17 @@ function addIncidenciaRow() {
       <option value="lesion">Lesión</option>
       <option value="otra">Otra</option>
     </select>
-    <select aria-label="Equipo">
+    <select>
       <option value="local">Local</option>
       <option value="visitante">Visitante</option>
     </select>
-    <input type="text" placeholder="Jugador" aria-label="Jugador" />
-    <input type="text" placeholder="Detalle" aria-label="Detalle" />
+    <input type="text" placeholder="Jugador" />
+    <input type="text" placeholder="Detalle" />
     <button type="button" class="remove-btn">Eliminar</button>
   `;
 
-  const removeBtn = row.querySelector('.remove-btn');
-  removeBtn.addEventListener('click', () => row.remove());
+  const remove = row.querySelector('.remove-btn');
+  remove.addEventListener('click', () => row.remove());
 
   container.appendChild(row);
 }
@@ -201,17 +199,13 @@ function obtenerJugadoresMarcados(tipo) {
   const selector = tipo === 'local' ? '#convocadosLocal input:checked' : '#convocadosVisitante input:checked';
   return [...document.querySelectorAll(selector)].map((input) => {
     const value = JSON.parse(input.value);
-    return {
-      dorsal: value.dorsal,
-      nombre: value.nombre
-    };
+    return { dorsal: value.dorsal, nombre: value.nombre };
   });
 }
 
 function obtenerIncidencias() {
   return [...document.querySelectorAll('.incidencia-row')].map((row) => {
     const inputs = row.querySelectorAll('input, select');
-
     return {
       minuto: inputs[0].value,
       tipo: inputs[1].value,
@@ -224,10 +218,10 @@ function obtenerIncidencias() {
 
 function guardarActa() {
   const partidoId = document.getElementById('partidoSelect').value;
-  const partido = state.partidos.find((item) => item.id === partidoId);
+  const partido = state.partidos.find((p) => p.id === partidoId);
 
   if (!partido) {
-    alert('Primero selecciona un partido.');
+    alert('Selecciona un partido');
     return;
   }
 
@@ -239,12 +233,8 @@ function guardarActa() {
     campo: document.getElementById('campoInput').value,
     arbitro: document.getElementById('arbitroSelect').value,
     partido: {
-      id: partido.id,
       local: partido.local,
-      visitante: partido.visitante,
-      fecha: partido.fecha,
-      hora: partido.hora,
-      campo: partido.campo
+      visitante: partido.visitante
     },
     resultado: {
       local: Number(document.getElementById('golesLocal').value || 0),
@@ -262,45 +252,43 @@ function guardarActa() {
   state.actas = [acta, ...state.actas];
   localStorage.setItem(actasKey, JSON.stringify(state.actas));
   renderSavedActas();
-  alert('Acta guardada correctamente.');
+  alert('Acta guardada');
 }
 
 function renderSavedActas() {
-  const actasList = document.getElementById('actasGuardadas');
-  actasList.innerHTML = '';
+  const list = document.getElementById('actasGuardadas');
+  list.innerHTML = '';
 
   if (!state.actas.length) {
-    const empty = document.createElement('li');
-    empty.textContent = 'Todavía no hay actas guardadas.';
-    actasList.appendChild(empty);
+    list.innerHTML = '<li>Todavía no hay actas guardadas.</li>';
     return;
   }
 
   state.actas.forEach((acta) => {
-    const item = document.createElement('li');
-    item.className = 'acta-item';
+    const li = document.createElement('li');
+    li.className = 'acta-item';
 
     const meta = document.createElement('div');
     meta.className = 'acta-meta';
     meta.innerHTML = `
       <strong>${acta.partido.local} ${acta.resultado.local} - ${acta.resultado.visitante} ${acta.partido.visitante}</strong>
-      <span>Jornada ${acta.jornada} • ${acta.fecha || acta.partido.fecha}</span>
+      <span>Jornada ${acta.jornada}</span>
     `;
 
-    const cargarBtn = document.createElement('button');
-    cargarBtn.type = 'button';
-    cargarBtn.textContent = 'Cargar';
-    cargarBtn.addEventListener('click', () => cargarActaGuardada(acta));
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = 'Cargar';
+    btn.addEventListener('click', () => cargarActaGuardada(acta));
 
-    item.appendChild(meta);
-    item.appendChild(cargarBtn);
-    actasList.appendChild(item);
+    li.appendChild(meta);
+    li.appendChild(btn);
+    list.appendChild(li);
   });
 }
 
 function cargarActaGuardada(acta) {
   const partidoSelect = document.getElementById('partidoSelect');
-  const partido = state.partidos.find((item) => item.id === acta.partido.id);
+  const partido = state.partidos.find((p) => p.local === acta.partido.local && p.visitante === acta.partido.visitante);
 
   if (!partido) return;
 
@@ -316,19 +304,17 @@ function cargarActaGuardada(acta) {
   document.getElementById('observaciones').value = acta.observaciones || '';
 
   const localChecks = document.querySelectorAll('#convocadosLocal input');
-  localChecks.forEach((checkbox) => {
-    const value = JSON.parse(checkbox.value);
-    checkbox.checked = !!(acta.convocados?.local || []).find(
-      (player) => player.dorsal === value.dorsal && player.nombre === value.nombre
-    );
+  localChecks.forEach((input) => {
+    const val = JSON.parse(input.value);
+    const encontrado = (acta.convocados?.local || []).some((p) => p.dorsal === val.dorsal && p.nombre === val.nombre);
+    input.checked = encontrado;
   });
 
   const visitanteChecks = document.querySelectorAll('#convocadosVisitante input');
-  visitanteChecks.forEach((checkbox) => {
-    const value = JSON.parse(checkbox.value);
-    checkbox.checked = !!(acta.convocados?.visitante || []).find(
-      (player) => player.dorsal === value.dorsal && player.nombre === value.nombre
-    );
+  visitanteChecks.forEach((input) => {
+    const val = JSON.parse(input.value);
+    const encontrado = (acta.convocados?.visitante || []).some((p) => p.dorsal === val.dorsal && p.nombre === val.nombre);
+    input.checked = encontrado;
   });
 
   const incidenciasContainer = document.getElementById('incidenciasContainer');
@@ -350,15 +336,15 @@ function cargarActaGuardada(acta) {
   });
 }
 
-function resetPartidoFields() {
-  document.getElementById('fechaInput').value = '';
-  document.getElementById('horaInput').value = '';
-  document.getElementById('campoInput').value = '';
-  document.getElementById('golesLocal').value = 0;
-  document.getElementById('golesVisitante').value = 0;
-  document.getElementById('observaciones').value = '';
-  document.getElementById('convocadosLocal').innerHTML = '';
-  document.getElementById('convocadosVisitante').innerHTML = '';
+function bindEvents() {
+  document.getElementById('partidoSelect').addEventListener('change', cargarPartidoSeleccionado);
+  document.getElementById('addIncidencia').addEventListener('click', addIncidenciaRow);
+  document.getElementById('guardarActa').addEventListener('click', guardarActa);
 }
 
-initApp();
+buildJugadoresMap();
+populateArbitros();
+populateJornadas();
+bindEvents();
+addIncidenciaRow();
+renderSavedActas();
