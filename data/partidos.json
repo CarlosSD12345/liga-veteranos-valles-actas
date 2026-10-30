@@ -10,30 +10,30 @@
       "hora": "08:15"
     },
     {
-      "id": "j2-p1",
-      "jornada": 2,
-      "local": "C.E. Santa Eulalia de Ronçana",
-      "visitante": "A.V. L'Ametlla del Vallés",
-      "campo": "Mpal Santa Eulalia",
-      "fecha": "2026-10-19",
-      "hora": "08:00"
+      "id": "j1-p2",
+      "jornada": 1,
+      "local": "C.E. Santa Eulàlia de Ronçana",
+      "visitante": "Penya Decano",
+      "campo": "Mpal Santa Eulàlia",
+      "fecha": "2026-10-18",
+      "hora": "09:00"
     },
     {
-      "id": "j6-p2",
-      "jornada": 6,
-      "local": "U.E. Canovelles",
-      "visitante": "A.V. L'Ametlla del Vallés",
-      "campo": "MPAL CANOVELLES",
+      "id": "j2-p1",
+      "jornada": 2,
+      "local": "U.E. Castellar",
+      "visitante": "U.E. Sabadellenca",
+      "campo": "Mpal Castellar",
       "fecha": "2026-10-25",
       "hora": "08:00"
     },
     {
-      "id": "j7-p3",
-      "jornada": 7,
-      "local": "Penya Decano",
-      "visitante": "U.E. Castellar",
-      "campo": "Mpal Valles",
-      "fecha": "2026-10-26",
+      "id": "j2-p2",
+      "jornada": 2,
+      "local": "C.F. Barberá",
+      "visitante": "A.V. L'Ametlla del Vallés",
+      "campo": "Mpal Barberà",
+      "fecha": "2026-10-25",
       "hora": "09:00"
     }
   ]
