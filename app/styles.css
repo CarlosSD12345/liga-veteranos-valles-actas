@@ -202,7 +202,8 @@ textarea {
 
 .btn-primary,
 .btn-secondary,
-.remove-btn {
+.remove-btn,
+.add-suplente-btn {
   border: none;
   border-radius: 10px;
   padding: 11px 16px;
@@ -216,7 +217,8 @@ textarea {
   color: white;
 }
 
-.btn-secondary {
+.btn-secondary,
+.add-suplente-btn {
   background: var(--secondary);
   color: var(--primary-dark);
 }
@@ -228,8 +230,14 @@ textarea {
 
 .btn-primary:hover,
 .btn-secondary:hover,
-.remove-btn:hover {
+.remove-btn:hover,
+.add-suplente-btn:hover {
   transform: translateY(-1px);
+}
+
+.add-suplente-btn {
+  margin-top: 12px;
+  width: 100%;
 }
 
 .incidencias-list {

@@ -70,6 +70,30 @@ const state = {
   actas: JSON.parse(localStorage.getItem(actasKey) || '[]')
 };
 
+function createInitialRows() {
+  const rows = [];
+
+  for (let i = 0; i < 11; i += 1) {
+    rows.push({
+      nif: '',
+      dorsal: '',
+      nombreCompleto: '',
+      titular: true,
+      id: `t-${i}`
+    });
+  }
+
+  rows.push({
+    nif: '',
+    dorsal: '',
+    nombreCompleto: '',
+    titular: false,
+    id: `s-1`
+  });
+
+  return rows;
+}
+
 function buildJugadoresMap() {
   const mapa = {};
 
@@ -84,6 +108,46 @@ function buildJugadoresMap() {
   state.jugadores = mapa;
 }
 
+function addSuplenteRow(tipo) {
+  const container = document.getElementById(tipo === 'local' ? 'convocadosLocal' : 'convocadosVisitante');
+  if (!container) return;
+
+  const row = document.createElement('div');
+  row.className = 'player-row';
+
+  const nifInput = document.createElement('input');
+  nifInput.type = 'text';
+  nifInput.placeholder = 'NIF';
+  nifInput.setAttribute('aria-label', 'NIF del jugador');
+
+  const dorsalInput = document.createElement('input');
+  dorsalInput.type = 'number';
+  dorsalInput.min = '1';
+  dorsalInput.max = '99';
+  dorsalInput.placeholder = 'Dorsal';
+  dorsalInput.setAttribute('aria-label', 'Dorsal del jugador');
+
+  const nombreInput = document.createElement('input');
+  nombreInput.type = 'text';
+  nombreInput.placeholder = 'Nombre y apellidos';
+  nombreInput.setAttribute('aria-label', 'Nombre y apellidos del jugador');
+
+  const titularWrap = document.createElement('label');
+  titularWrap.className = 'titular-check';
+
+  const titularInput = document.createElement('input');
+  titularInput.type = 'checkbox';
+  titularInput.checked = false;
+
+  titularWrap.appendChild(titularInput);
+
+  row.appendChild(nifInput);
+  row.appendChild(dorsalInput);
+  row.appendChild(nombreInput);
+  row.appendChild(titularWrap);
+  container.appendChild(row);
+}
+
 function renderPlayerRows(tipo, jugadoresEquipo) {
   const container = document.getElementById(tipo === 'local' ? 'convocadosLocal' : 'convocadosVisitante');
   container.innerHTML = '';
@@ -96,14 +160,22 @@ function renderPlayerRows(tipo, jugadoresEquipo) {
   thead.innerHTML = '<span>NIF</span><span>Dorsal</span><span>Nombre y apellidos</span><span>Titular</span>';
   table.appendChild(thead);
 
-  const filas = jugadoresEquipo && jugadoresEquipo.length ? jugadoresEquipo : [
-    { nif: '', dorsal: '', nombreCompleto: '', titular: true },
-    { nif: '', dorsal: '', nombreCompleto: '', titular: false },
-    { nif: '', dorsal: '', nombreCompleto: '', titular: true },
-    { nif: '', dorsal: '', nombreCompleto: '', titular: false }
-  ];
+  const baseRows = createInitialRows();
 
-  filas.forEach((jugador) => {
+  const mappedRows = (jugadoresEquipo || []).map((jugador) => ({
+    nif: jugador.nif || '',
+    dorsal: jugador.dorsal || '',
+    nombreCompleto: jugador.nombreCompleto || jugador.nombre || '',
+    titular: Boolean(jugador.titular),
+    id: jugador.id || `row-${Math.random()}`
+  }));
+
+  const totalRows = [...baseRows, ...mappedRows].sort((a, b) => {
+    if (a.titular !== b.titular) return Number(b.titular) - Number(a.titular);
+    return String(a.id).localeCompare(String(b.id));
+  });
+
+  totalRows.forEach((jugador) => {
     const row = document.createElement('div');
     row.className = 'player-row';
 
@@ -212,14 +284,16 @@ function cargarPartidoSeleccionado() {
     nif: '',
     dorsal: jugador.dorsal,
     nombreCompleto: jugador.nombre,
-    titular: true
+    titular: true,
+    id: `local-${jugador.dorsal}`
   }));
 
   const jugadoresVisitante = (state.jugadores[partido.visitante] || []).map((jugador) => ({
     nif: '',
     dorsal: jugador.dorsal,
     nombreCompleto: jugador.nombre,
-    titular: true
+    titular: true,
+    id: `visitante-${jugador.dorsal}`
   }));
 
   renderPlayerRows('local', jugadoresLocal);
@@ -430,6 +504,13 @@ function bindEvents() {
   document.getElementById('partidoSelect').addEventListener('change', cargarPartidoSeleccionado);
   document.getElementById('addIncidencia').addEventListener('click', addIncidenciaRow);
   document.getElementById('guardarActa').addEventListener('click', guardarActa);
+
+  document.querySelectorAll('.add-suplente-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      const team = button.dataset.team;
+      addSuplenteRow(team);
+    });
+  });
 }
 
 buildJugadoresMap();
@@ -445,17 +526,8 @@ const visitanteContainer = document.getElementById('convocadosVisitante');
 if (localContainer) renderPlayerRows('local', []);
 if (visitanteContainer) renderPlayerRows('visitante', []);
 
-const partidoSelect = document.getElementById('partidoSelect');
-if (partidoSelect && partidoSelect.options.length > 0) {
-  partidoSelect.value = partidoSelect.options[0].value;
-  cargarPartidoSeleccionado();
+const selector = document.getElementById('jornadaSelect');
+if (selector && selector.options.length > 0) {
+  selector.value = selector.options[0].value;
+  populatePartidosByJornada(Number(selector.value));
 }
-
-window.addEventListener('load', () => {
-  const selector = document.getElementById('jornadaSelect');
-  if (selector && selector.options.length > 0) {
-    selector.value = selector.options[0].value;
-    populatePartidosByJornada(Number(selector.value));
-  }
-});
-
