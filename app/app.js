@@ -34,12 +34,10 @@ const jugadores = [
   { equipo: "U.E. Sabadellenca", dorsal: 2, nombre: "Abel" },
   { equipo: "U.E. Sabadellenca", dorsal: 3, nombre: "Dídac" },
   { equipo: "U.E. Sabadellenca", dorsal: 7, nombre: "Xavi" },
-  { equipo: "U.E. Sabadellenca", dorsal: 9, nombre: "Pau" },
 
   { equipo: "A.V. L'Ametlla del Vallés", dorsal: 7, nombre: "Torito" },
   { equipo: "A.V. L'Ametlla del Vallés", dorsal: 9, nombre: "Kaña" },
   { equipo: "A.V. L'Ametlla del Vallés", dorsal: 10, nombre: "Javi" },
-  { equipo: "A.V. L'Ametlla del Vallés", dorsal: 11, nombre: "Miki" },
 
   { equipo: "U.E. Castellar", dorsal: 1, nombre: "Jaime" },
   { equipo: "U.E. Castellar", dorsal: 7, nombre: "Xavi" },
@@ -47,8 +45,8 @@ const jugadores = [
 ];
 
 const state = {
-  partidos: partidos,
-  arbitros: arbitros,
+  partidos,
+  arbitros,
   jugadores: {},
   actas: JSON.parse(localStorage.getItem(actasKey) || '[]')
 };
