@@ -3,50 +3,60 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acta de partido</title>
+    <title>Acta de partido | Liga Veteranos Vallès</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="container">
+    <main class="app-shell">
       <header class="topbar">
-        <h1>Acta de partido</h1>
+        <div>
+          <p class="eyebrow">Liga Veteranos Vallès</p>
+          <h1>Acta del partido</h1>
+        </div>
         <button id="guardarActa" class="btn-primary">Guardar acta</button>
       </header>
 
       <section class="card">
         <h2>Datos del encuentro</h2>
+
         <div class="grid two-columns">
           <label>
             Jornada
             <select id="jornadaSelect"></select>
           </label>
+
           <label>
             Partido
             <select id="partidoSelect"></select>
           </label>
+
           <label>
             Fecha
             <input id="fechaInput" type="date" />
           </label>
-          <label>
-            Árbitro
-            <select id="arbitroSelect"></select>
-          </label>
-          <label>
-            Campo
-            <input id="campoInput" type="text" placeholder="Campo" />
-          </label>
+
           <label>
             Hora
             <input id="horaInput" type="time" />
           </label>
+
+          <label>
+            Campo
+            <input id="campoInput" type="text" placeholder="Campo" />
+          </label>
+
+          <label>
+            Árbitro
+            <select id="arbitroSelect"></select>
+          </label>
         </div>
 
-        <div class="grid score-grid">
+        <div class="score-grid">
           <div class="score-box">
             <h3 id="localEquipo">Local</h3>
             <input id="golesLocal" type="number" min="0" value="0" />
           </div>
+
           <div class="score-box">
             <h3 id="visitanteEquipo">Visitante</h3>
             <input id="golesVisitante" type="number" min="0" value="0" />
@@ -56,27 +66,33 @@
 
       <section class="card">
         <h2>Convocados</h2>
-        <div class="grid two-columns">
-          <div>
-            <label>Local</label>
-            <textarea id="convocadosLocal" rows="8" placeholder="Ejemplo: 1 - Uri&#10;7 - Abel"></textarea>
+        <div class="players-grid">
+          <div class="team-panel">
+            <h3 id="localLabel">Local</h3>
+            <div id="convocadosLocal" class="player-list"></div>
           </div>
-          <div>
-            <label>Visitante</label>
-            <textarea id="convocadosVisitante" rows="8" placeholder="Ejemplo: 9 - Kaña&#10;10 - Javi"></textarea>
+
+          <div class="team-panel">
+            <h3 id="visitanteLabel">Visitante</h3>
+            <div id="convocadosVisitante" class="player-list"></div>
           </div>
         </div>
       </section>
 
       <section class="card">
         <h2>Incidencias</h2>
-        <div id="incidenciasContainer"></div>
-        <button id="addIncidencia" class="btn-secondary">Añadir incidencia</button>
+        <div id="incidenciasContainer" class="incidencias-list"></div>
+        <button id="addIncidencia" type="button" class="btn-secondary">Añadir incidencia</button>
       </section>
 
       <section class="card">
         <h2>Observaciones</h2>
-        <textarea id="observaciones" rows="5" placeholder="Comentarios del árbitro"></textarea>
+        <textarea id="observaciones" rows="5" placeholder="Comentarios del árbitro..."></textarea>
+      </section>
+
+      <section class="card saved-actas-card">
+        <h2>Actas guardadas</h2>
+        <ul id="actasGuardadas" class="actas-list"></ul>
       </section>
     </main>
 
