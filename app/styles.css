@@ -150,6 +150,20 @@ textarea {
   color: var(--text);
 }
 
+.section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 10px 0 8px;
+}
+
+.section-divider {
+  border-top: 1px solid var(--border);
+  margin: 14px 0 10px;
+}
+
 .player-table-container {
   display: flex;
   flex-direction: column;

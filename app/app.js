@@ -88,7 +88,7 @@ function createInitialRows() {
     dorsal: '',
     nombreCompleto: '',
     titular: false,
-    id: `s-1`
+    id: 's-1'
   });
 
   return rows;
