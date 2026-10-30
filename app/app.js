@@ -83,15 +83,15 @@ function createInitialRows() {
     });
   }
 
-  rows.push({
-    nif: '',
-    dorsal: '',
-    nombreCompleto: '',
-    titular: false,
-    id: 's-1'
-  });
-
   return rows;
+}
+
+function updateTeamTitles(partido) {
+  const localTitle = document.querySelector('.team-panel[data-team="local"] .team-title');
+  const visitanteTitle = document.querySelector('.team-panel[data-team="visitante"] .team-title');
+
+  if (localTitle && partido?.local) localTitle.textContent = `EQUIPO LOCAL · ${partido.local}`;
+  if (visitanteTitle && partido?.visitante) visitanteTitle.textContent = `EQUIPO VISITANTE · ${partido.visitante}`;
 }
 
 function buildJugadoresMap() {
@@ -274,6 +274,7 @@ function cargarPartidoSeleccionado() {
 
   if (!partido) return;
 
+  updateTeamTitles(partido);
   document.getElementById('localEquipo').textContent = partido.local;
   document.getElementById('visitanteEquipo').textContent = partido.visitante;
   document.getElementById('fechaInput').value = partido.fecha;
