@@ -26,7 +26,7 @@ const infoTemplate = `
 
     <div class="teams-row">
       <div class="team-box">
-        <div class="team-crests"></div>
+        <div class="team-crest"></div>
         <div class="team-name">Sant Pere Nord</div>
       </div>
 
@@ -36,44 +36,44 @@ const infoTemplate = `
       </div>
 
       <div class="team-box">
-        <div class="team-crests team-crests--visitant"></div>
+        <div class="team-crest team-crest--visitant"></div>
         <div class="team-name">Òlimpic Can Fatjó</div>
       </div>
     </div>
   </section>
 
-  <section class="section-card">
+  <section class="card">
     <div class="field-grid">
       <div class="field">
-        <label for="fecha">Data</label>
-        <input id="fecha" class="input" type="date" value="2026-10-31" />
+        <label>Data</label>
+        <input class="input" type="date" value="2026-10-31" />
       </div>
 
       <div class="field">
         <label>Hora</label>
         <div class="field-grid">
           <div class="field">
-            <label for="horaLocal">1a part</label>
-            <input id="horaLocal" class="input" type="time" value="18:00" />
+            <label>1a part</label>
+            <input class="input" type="time" value="18:00" />
           </div>
           <div class="field">
-            <label for="horaVisitant">2a part</label>
-            <input id="horaVisitant" class="input" type="time" value="18:00" />
+            <label>2a part</label>
+            <input class="input" type="time" value="18:00" />
           </div>
         </div>
       </div>
     </div>
 
     <div class="subheader">Suspès</div>
-    <div class="toggle-row">
+    <div class="toggle-wrap">
       <div class="toggle" aria-label="Suspès" aria-pressed="false">
         <span class="toggle-value">No</span>
       </div>
     </div>
 
-    <div class="inline-value" style="margin-top: 20px;">
+    <div class="inline-row">
       <div class="result-label">Resultat provisional</div>
-      <button class="result-plus" type="button" aria-label="Incrementar resultat">＋</button>
+      <button class="result-plus" type="button" aria-label="Afegir resultat">＋</button>
     </div>
 
     <div class="info-list">
@@ -91,20 +91,20 @@ const infoTemplate = `
     </div>
   </section>
 
-  <section class="section-card">
+  <section class="card">
     <div class="subheader">Àrbitres</div>
-    <div class="field">
-      <input class="input" type="text" value="SANCHEZ RODRIGUEZ, ORIOL" aria-label="Àrbitre 1" />
+    <div class="field" style="margin-top: 8px;">
+      <input class="input" type="text" value="SANCHEZ RODRIGUEZ, ORIOL" />
     </div>
     <div class="field" style="margin-top: 12px;">
-      <input class="input" type="text" value="" aria-label="Àrbitre 2" placeholder="Nom de l'àrbitre" />
+      <input class="input" type="text" value="" placeholder="Nom de l'àrbitre" />
     </div>
   </section>
 `;
 
 function renderPlayers(players, title) {
   return `
-    <section class="section-card">
+    <section class="card">
       <div class="subheader">${title}</div>
       <div class="player-list">
         ${players
@@ -126,7 +126,7 @@ function renderPlayers(players, title) {
 }
 
 const altresTemplate = `
-  <section class="section-card">
+  <section class="card">
     <div class="subheader">Altres dades</div>
     <div class="small-cards">
       <div class="mini-card">
@@ -171,9 +171,9 @@ function renderTab(tabName) {
   if (toggle) {
     toggle.addEventListener('click', () => {
       toggle.classList.toggle('is-on');
-      const valueEl = toggle.querySelector('.toggle-value');
+      const value = toggle.querySelector('.toggle-value');
       const isOn = toggle.classList.contains('is-on');
-      valueEl.textContent = isOn ? 'Sí' : 'No';
+      value.textContent = isOn ? 'Sí' : 'No';
       toggle.setAttribute('aria-pressed', String(isOn));
     });
   }
@@ -186,7 +186,6 @@ tabs.forEach((tab) => {
       item.classList.toggle('is-active', isActive);
       item.setAttribute('aria-selected', String(isActive));
     });
-
     renderTab(tab.dataset.tab);
   });
 });
